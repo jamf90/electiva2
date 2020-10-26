@@ -39,7 +39,12 @@ void setup() {
   else{
     Serial.print("Conectado a la aplicación :");
     Serial.println(host);
-    sendPost(15);
+    String tabla = "Motor_view";
+    String motor = "motor1";
+    float corriente = random(100,3000)/10;
+    float voltaje = random(1000,2500)/10;
+    sendPost(corriente, voltaje, tabla, motor);
+    
   }
 }
 
@@ -63,12 +68,12 @@ if (client.available()) {
 
 }
 
-void sendPost(int input){
+void sendPost(float voltaje, float corriente, String tabla, String motor){
   //Creamos la direccion para luego usarla
-  String dato = "DatoCorrecto=" + String(input);
+  String dato = "voltaje=" + String(voltaje)+ "&corriente=" + String(corriente) + "&tabla=" + String(tabla) + "&motor=" + String(motor);
 
   // Solicitud de tipo post para enviar al servidor 
-  client.println("POST /Datoenviado HTTP/1.1");
+  client.println("POST /guardardato HTTP/1.1");
   client.println("Host: gitelectiva.herokuapp.com");
   client.println("Cache-Control: no-cache");
   client.println("Content-Type: application/x-www-form-urlencoded");
